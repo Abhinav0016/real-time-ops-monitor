@@ -1,0 +1,6 @@
+[
+  {"event_id": "M1", "site_name": "Site A", "task": "Battery replacement", "status": "scheduled", "date": "2024-03-30"},
+  {"event_id": "M2", "site_name": "Site C", "task": "Antenna alignment", "status": "ongoing", "date": "2024-03-27"},
+  {"event_id": "M3", "site_name": "Site D", "task": "Software patch", "status": "scheduled", "date": "2024-04-05"},
+  {"event_id": "M4", "site_name": "Site B", "task": "Power grid inspection", "status": "scheduled", "date": "2024-03-29"}
+]

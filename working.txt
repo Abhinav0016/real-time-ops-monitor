@@ -1,0 +1,115 @@
+# Telecom AI Operations: Architectural Deep-Dive & Workflow Guide
+
+This document provides a granular explanation of the project's internal mechanics, data lifecycle, and modular 7-layer pipeline. It is designed to help developers understand exactly how raw JSON data is transformed into a polished, role-aware AI briefing.
+
+---
+
+## 🏗️ System Overview & Component Map
+
+The system follows a strict unidirectional data flow, starting from raw ingestion and ending with high-level AI synthesis.
+
+```mermaid
+graph TD
+    A[JSON Data Sources] --> B[Ingestion Layer]
+    B --> C[Preprocessing Layer]
+    C --> D[Feature Extraction]
+    D --> E[Pattern Detection]
+    E --> F[Intelligence Layer]
+    F --> G[Decision Layer]
+    G --> H[AI Briefing Layer]
+    H --> I[Streamlit Dashboard]
+```
+
+---
+
+## ⚙️ Detailed Workflow: The 7-Layer Pipeline
+
+### Layer 1: Data Ingestion (`ingestion.py`)
+- **Input**: 5x Physical JSON files (`device_health.json`, `usage.json`, etc.)
+- **Responsibility**:
+    - Uses `load_json_file` with mandatory field validation.
+    - **Validation**: If a record is missing a critical key (e.g., `device_id`), it is logged as a warning and skipped to prevent downstream crashes.
+    - **Initial Normalization**: Standardizes site names to Title Case and status/severity to lowercase.
+- **Output**: A raw dictionary containing lists of validated records.
+
+### Layer 2: Preprocessing (`preprocessing.py`)
+- **Input**: Raw dictionary from Layer 1.
+- **Responsibility**:
+    - **Timestamp Parsing**: Converts string dates into `datetime` objects using `isofromat` and `strptime`.
+    - **Grouping**: Efficiently groups devices, tickets, and alerts by `site_name` using dictionary mapping.
+    - **Site Summary Generation**: Pre-calculates basic tallies (total devices, offline count) per site to create a "Global State" object.
+- **Output**: A structured `preprocessed_data` object with grouped site views and chronological sorting.
+
+### Layer 3: Feature Extraction (`feature_extraction.py`)
+- **Input**: Structured object from Layer 2.
+- **Responsibility**:
+    - **Uptime Calculation**: `(online / total) * 100` per site.
+    - **SLA Tracking**: Identifies the oldest ticket age per site in days.
+    - **Trend Analysis**: Compares the last two entries in `usage.json`.
+        - `pct_change = ((last - prev) / prev) * 100`
+        - `trend` = "increasing" if diff > 0.01 else "decreasing".
+- **Output**: A `features` dictionary containing telemetry metrics, KPI percentages, and trend flags.
+
+### Layer 4: Pattern Detection (`pattern_detection.py`)
+- **Input**: Metrics and KPIs from Layer 3.
+- **Responsibility**: Uses rule-based logic to flag operational risks:
+    - **Outage**: `offline_count >= 3` OR `offline_pct >= 80%`.
+    - **Degradation**: `offline_pct` between 40% and 80%.
+    - **Backlog**: `open_tickets >= 3`.
+    - **SLA Breach**: `oldest_ticket_age > 3 days`.
+    - **Usage Spike**: `trend == "increasing"` AND `pct_change > 15%`.
+- **Output**: A list of `Issue` objects (type, severity, description, site).
+
+### Layer 5: Intelligence Layer (`intelligence_layer.py`)
+- **Input**: Detected issues (Layer 4) + Global Metrics (Layer 3).
+- **Responsibility**:
+    - **Impact-Based Scoring**: Assigns a `priority_score` (1-10).
+        - Base: `site_outage` (5), `critical_alert` (4), `backlog` (3).
+        - Multiplier: `+2` if `affected_devices > 3` or `related_tickets > 2`.
+    - **Data Correlation**: Links relevant alert IDs and ticket IDs directly to the issue object for AI context.
+- **Output**: A ranked list of enriched issues, sorted by `priority_score`.
+
+### Layer 6: Decision Layer (`decision_layer.py`)
+- **Input**: Ranked issues (Layer 5).
+- **Responsibility**:
+    - **Heuristic Recommendations**: Maps issue types to specific SOPs (Standard Operating Procedures).
+        - `site_outage` → "Dispatch field tech immediately."
+        - `usage_spike` → "Check node capacity and scale backhaul."
+    - **Rule-Based Predictions**: Generates logical forecasts (e.g., "High risk of SLA breach at Site B").
+- **Output**: Lists of `predictions` and `recommendations`.
+
+### Layer 7: AI Briefing Layer (`ai_briefing.py`)
+- **Input**: All structured data from Layers 1-6 + User `role`.
+- **Responsibility**:
+    - **Prompt Engineering**: Instructs Gemini to act as an "Advanced NOC Assistant". It injects the entire structured state as a context-rich prompt.
+    - **Role Personality**:
+        - **Fleet Manager**: Focuses on "Network Stability" and "Site Uptime".
+        - **NOC Analyst**: Focuses on "Active Alerts" and "Ticket Correlation".
+        - **Operations Head**: Focuses on "SLA Risks" and "Usage Trends".
+    - **Model Discovery**: Dynamically scans available models (`gemini-1.5-flash`, etc.) for resilience.
+- **Output**: A natural language briefing string.
+
+---
+
+## 🎨 Frontend Architecture (`app.py`)
+
+The dashboard is built with **Streamlit** and heavily customized with Vanilla CSS.
+
+### 1. The Layout Engine
+- Uses a **Strict 8:4 Grid System** (`st.columns([8, 4])`).
+- **CSS Overrides**: Zeroes out Streamlit's default margins and forces columns to fill 100% height using Flexbox, ensuring no "empty gaps" between cards.
+
+### 2. High-Density Components
+- **Priority Hero**: Uses a custom CSS glow and numbered severity rings to highlight critical issues.
+- **System Snapshot**: Uses custom HTML/CSS progress bars that change color (Green → Orange → Red) based on risk values.
+- **Ticket Table**: Features custom Zebra-row styling and color-coded status badges for professional NOC aesthetics.
+
+### 3. AI Briefing Presentation
+- **Section Parsing**: The app parses the Gemini output for section headers and icons.
+- **Markdown-to-HTML**: A custom sanitization function converts raw markdown (`**bold**`, `*italic*`, lists) into clean, styled HTML before rendering in a scrollable `400px` max-height pane.
+
+---
+
+## 🔑 Security & Configuration
+- **Environment**: Sensitive keys are loaded from `.env` using `python-dotenv`.
+- **Fail-Safe**: If the API key is missing or Gemini fails, the system provides a detailed error card in the UI rather than crashing, ensuring operational continuity.

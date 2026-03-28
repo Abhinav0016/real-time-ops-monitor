@@ -1,0 +1,9 @@
+[
+  {"timestamp": "2024-03-21", "data_usage_gb": 450.5, "region": "South", "user_count": 1200},
+  {"timestamp": "2024-03-22", "data_usage_gb": 460.2, "region": "South", "user_count": 1210},
+  {"timestamp": "2024-03-23", "data_usage_gb": 455.8, "region": "South", "user_count": 1195},
+  {"timestamp": "2024-03-24", "data_usage_gb": 472.1, "region": "South", "user_count": 1250},
+  {"timestamp": "2024-03-25", "data_usage_gb": 490.5, "region": "South", "user_count": 1300},
+  {"timestamp": "2024-03-26", "data_usage_gb": 510.2, "region": "South", "user_count": 1350},
+  {"timestamp": "2024-03-27", "data_usage_gb": 645.8, "region": "South", "user_count": 1500}
+]

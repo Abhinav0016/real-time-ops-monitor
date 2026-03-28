@@ -1,0 +1,9 @@
+[
+  {"alert_id": "A1", "device_id": "D1", "severity": "warning", "timestamp": "2026-03-27T10:00:00", "message": "High temperature detected"},
+  {"alert_id": "A2", "device_id": "D4", "severity": "critical", "timestamp": "2024-03-27T11:00:00", "message": "Signal loss detected"},
+  {"alert_id": "A3", "device_id": "D5", "severity": "CRITICAL", "timestamp": "2024-03-27T11:30:00", "message": "Gateway unreachable"},
+  {"alert_id": "A4", "device_id": "D6", "severity": "critical", "timestamp": "2024-03-27T12:00:00", "message": "No power reported"},
+  {"alert_id": "A5", "device_id": "D9", "severity": "warning", "timestamp": "2024-03-27T14:00:00", "message": "Low battery backup"},
+  {"alert_id": "A6", "device_id": "D7", "severity": "warning", "timestamp": "2024-03-27T15:00:00", "message": "Firmware update available"},
+  {"alert_id": "A7", "device_id": "D11", "severity": "info", "timestamp": "2024-03-27T16:00:00", "message": "Re-synchronization successful"}
+]
