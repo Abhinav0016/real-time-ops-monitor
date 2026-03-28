@@ -1,9 +1,9 @@
-from ingestion import load_all_data
+from ingestion_prometheus import get_live_dashboard_data
 import json
 
 def test_ingestion():
-    print("Testing Data Ingestion Layer...")
-    data = load_all_data()
+    print("Testing API-First Data Ingestion...")
+    data = get_live_dashboard_data(use_mock=True)
     
     # Check if all keys exist
     expected_keys = ["devices", "alerts", "usage", "tickets", "maintenance"]
@@ -13,28 +13,22 @@ def test_ingestion():
         else:
             print(f"[FAIL] Key '{key}' missing from structured data.")
             
-    # Check normalization
-    if data["devices"]:
-        device = data["devices"][0]
-        site_name_normalized = device.get("site_name") == "Site A"
-        status_normalized = device.get("status") == "online"
-        
-        if site_name_normalized:
-            print("[PASS] Site name normalization works ('site a' -> 'Site A').")
-        else:
-            print(f"[FAIL] Site name normalization failed: {device.get('site_name')}")
-            
-        if status_normalized:
-            print("[PASS] Status normalization works ('Online' -> 'online').")
-        else:
-            print(f"[FAIL] Status normalization failed: {device.get('status')}")
-
-    # Check validation (missing fields)
-    # We can create a temporary corrupt file to test this if needed, 
-    # but for now, we'll just check the current output.
+    # Check Site Density
+    sites = set(d.get('site_name') for d in data.get('devices', []))
+    print(f"Detected {len(sites)} unique sites: {sites}")
     
-    print("\nFull Data Output:")
-    print(json.dumps(data, indent=2))
+    # Check Alert Site Association
+    unknown_alerts = [a for a in data.get('alerts', []) if a.get('site_name') == "Unknown Site"]
+    if unknown_alerts:
+        print(f"[FAIL] Found {len(unknown_alerts)} alerts with 'Unknown Site'.")
+    else:
+        print("[PASS] All alerts correctly attributed to sites.")
+
+    print("\nSample Alert Record:")
+    if data["alerts"]:
+        print(json.dumps(data["alerts"][0], indent=2))
+        
+    print(f"\nTotal Tickets: {len(data['tickets'])}")
 
 if __name__ == "__main__":
     test_ingestion()

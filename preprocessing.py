@@ -116,10 +116,11 @@ def preprocess_data(raw_data):
         alerts_by_site[site].append(alert)
 
     tickets_by_site = group_by_site(clean_data.get('tickets', []))
+    usage_by_site = group_by_site(clean_data.get('usage', []), site_field='site_name')
 
     # 4. Calculate Site Summary (Derived Fields)
     site_summary = {}
-    all_sites = set(devices_by_site.keys()) | set(alerts_by_site.keys()) | set(tickets_by_site.keys())
+    all_sites = set(devices_by_site.keys()) | set(alerts_by_site.keys()) | set(tickets_by_site.keys()) | set(usage_by_site.keys())
     
     for site in all_sites:
         site_devices = devices_by_site.get(site, [])
@@ -135,6 +136,7 @@ def preprocess_data(raw_data):
         "devices_by_site": devices_by_site,
         "alerts_by_site": alerts_by_site,
         "tickets_by_site": tickets_by_site,
+        "usage_by_site": usage_by_site,
         "usage": clean_data.get('usage', []),
         "maintenance": clean_data.get('maintenance', []),
         "site_summary": site_summary

@@ -9,35 +9,54 @@ PROM_DEMO_URL = "https://prometheus.demo.do.prometheus.io/api/v1/query"
 def get_prometheus_mock_data():
     """
     Returns a high-fidelity simulation of the Prometheus Query API response.
-    This mimics the exact structure returned by /api/v1/query.
+    Expanded to 10 sites (A-J) and 30+ devices for enterprise-scale analysis.
     """
     ts = datetime.utcnow().timestamp()
+    results = []
+    
+    sites = ["Site A", "Site B", "Site C", "Site D", "Site E", "Site F", "Site G", "Site H", "Site I", "Site J"]
+    
+    for i, site in enumerate(sites):
+        # 3-5 devices per site
+        num_devices = random.randint(3, 5)
+        for d in range(num_devices):
+            instance = f"Cell-Tower-{site[-1]}{d+1}"
+            
+            # Health ('up' metric)
+            status = "1"
+            if site in ["Site A", "Site D"] and d == 0: status = "0" # Some offline
+            if site == "Site G": status = "0" # Entire site down
+            
+            results.append({
+                "metric": {"__name__": "up", "instance": instance, "site": site, "job": "telecom_nodes"},
+                "value": [ts, status]
+            })
+            
+            # Load ('node_load1')
+            load_val = str(round(random.uniform(0.5, 3.5), 2))
+            results.append({
+                "metric": {"__name__": "node_load1", "instance": instance, "site": site},
+                "value": [ts, load_val]
+            })
+            
+            # Alerts (randomly assigned)
+            if site in ["Site A", "Site D", "Site G"] and random.random() > 0.6:
+                alert_type = random.choice(["Signal Loss", "Power Failure", "Hardware Fault", "Temp High"])
+                results.append({
+                    "metric": {"__name__": "alert_critical", "instance": instance, "site": site, "alert_type": alert_type},
+                    "value": [ts, "1"]
+                })
+            elif random.random() > 0.85:
+                results.append({
+                    "metric": {"__name__": "alert_warning", "instance": instance, "site": site, "alert_type": "Minor Fluctuation"},
+                    "value": [ts, "1"]
+                })
+                
     return {
         "status": "success",
         "data": {
             "resultType": "vector",
-            "result": [
-                {
-                    "metric": {"__name__": "up", "instance": "Cell-Tower-A1", "site": "Site A", "job": "telecom_nodes"},
-                    "value": [ts, "1"]
-                },
-                {
-                    "metric": {"__name__": "up", "instance": "Cell-Tower-A2", "site": "Site A", "job": "telecom_nodes"},
-                    "value": [ts, "0"]
-                },
-                {
-                    "metric": {"__name__": "up", "instance": "Cell-Tower-B1", "site": "Site B", "job": "telecom_nodes"},
-                    "value": [ts, "1"]
-                },
-                {
-                    "metric": {"__name__": "node_load1", "instance": "Cell-Tower-B1", "site": "Site B"},
-                    "value": [ts, str(round(random.uniform(0.8, 2.2), 2))]
-                },
-                {
-                    "metric": {"__name__": "alert_critical", "instance": "Cell-Tower-A2", "site": "Site A", "alert_type": "Signal Loss"},
-                    "value": [ts, "1"]
-                }
-            ]
+            "result": results
         }
     }
 
@@ -65,7 +84,7 @@ def map_prometheus_to_telecom(api_response):
     """
     results = api_response.get("data", {}).get("result", [])
     
-    device_health = []
+    devices = []
     usage_data = []
     alerts = []
     
@@ -82,7 +101,7 @@ def map_prometheus_to_telecom(api_response):
         # 1. Map 'up' metric to health status
         if metric.get("__name__") == "up":
             status = "online" if val_str == "1" else "offline"
-            device_health.append({
+            devices.append({
                 "device_id": f"PROM-{instance}",
                 "site_name": site,
                 "status": status,
@@ -91,7 +110,7 @@ def map_prometheus_to_telecom(api_response):
             
         # 2. Map 'node_load' or similar to usage
         if metric.get("__name__") == "node_load1":
-            usage_gb = float(val_str) * 10 # Scale for dashboard visibility
+            usage_gb = float(val_str) * 10
             usage_data.append({
                 "site_name": site,
                 "data_usage_gb": round(usage_gb, 2),
@@ -104,38 +123,100 @@ def map_prometheus_to_telecom(api_response):
             severity = metric["__name__"].split("_")[1]
             alerts.append({
                 "alert_id": f"PROM-AL-{random.randint(1000,9999)}",
-                "device_id": instance,
+                "device_id": f"PROM-{instance}",
                 "site_name": site,
                 "severity": severity,
                 "message": f"Live Prometheus {severity.upper()} Alert: {metric.get('alert_type','General Error')}"
             })
             
-    return device_health, usage_data, alerts
+    return devices, usage_data, alerts
+
+def get_jira_mock_data():
+    """
+    Returns a high-fidelity simulation of the Jira Ticket API response.
+    Provides 20+ active tickets mapped to the 10 sites (A-J).
+    """
+    sites = ["Site A", "Site B", "Site C", "Site D", "Site E", "Site F", "Site G", "Site H", "Site I", "Site J"]
+    tickets = []
+    
+    # Pre-defined issues for variety
+    issue_pool = [
+        ("Power instability detected", "critical"),
+        ("Signal degradation reported by users", "high"),
+        ("Minor hardware optimization required", "low"),
+        ("Backhaul connectivity slow", "medium"),
+        ("Device firmware update pending", "medium"),
+        ("Total node failure", "critical"),
+        ("Intermittent ping spikes", "high")
+    ]
+    
+    assignees = ["Emily", "John", "Jake", "Sarah", "Mike", "Ryan"]
+    
+    for i in range(25):
+        site = random.choice(sites)
+        desc, prio = random.choice(issue_pool)
+        status = random.choice(["open", "open", "pending", "pending"]) # Tend towards open
+        
+        tickets.append({
+            "ticket_id": f"JIRA-{random.randint(1000, 9999)}",
+            "device_id": f"PROM-Cell-Tower-{site[-1]}{random.randint(1,5)}",
+            "status": status,
+            "priority": prio,
+            "age_days": random.randint(1, 8),
+            "assigned_to": random.choice(assignees) if status == "open" else "Unassigned",
+            "site_name": site,
+            "description": desc
+        })
+    return tickets
+
+def get_maintenance_mock_data():
+    """
+    Returns a high-fidelity simulation of the Maintenance Schedule API.
+    """
+    sites = ["Site A", "Site B", "Site C", "Site D", "Site E", "Site F", "Site G", "Site H", "Site I", "Site J"]
+    events = []
+    
+    for i in range(5):
+        site = random.choice(sites)
+        events.append({
+            "event_id": f"MNT-{random.randint(100, 999)}",
+            "site_name": site,
+            "status": random.choice(["upcoming", "in_progress"]),
+            "date": (datetime.now() + timedelta(days=random.randint(1, 5))).strftime("%Y-%m-%d"),
+            "engineer": random.choice(["Tech-A", "Tech-B", "Senior-Lead"])
+        })
+    return events
 
 def get_live_dashboard_data(use_mock=True):
     """
-    Entry point for the Dashboard 'Live Mode'.
-    Combines Prometheus monitoring with existing local Tickets/Maintenance.
+    Unified Entry Point: 100% API-Driven Operations.
+    Monitoring (Prometheus), Ticketing (Jira), and Maintenance.
     """
-    from ingestion import load_all_data
-    
-    # 1. Get Live Monitoring Data
+    # 1. Get Live Monitoring Data (Prometheus)
     api_resp = fetch_live_prometheus(use_mock=use_mock)
-    live_health, live_usage, live_alerts = map_prometheus_to_telecom(api_resp)
+    live_devices, live_usage, live_alerts = map_prometheus_to_telecom(api_resp)
     
-    # 2. Re-use existing local Tickets & Maintenance (static/manual entry systems)
-    local_data = load_all_data()
+    # 2. Get Live Ticketing Data (Jira API Mock)
+    api_tickets = get_jira_mock_data()
+    
+    # 3. Get Live Maintenance Data (Schedule API Mock)
+    api_maintenance = get_maintenance_mock_data()
     
     return {
-        "device_health": live_health if live_health else local_data.get("devices",[]),
-        "alerts": live_alerts if live_alerts else local_data.get("alerts",[]),
-        "usage": live_usage if live_usage else local_data.get("usage",[]),
-        "tickets": local_data["tickets"],
-        "maintenance": local_data["maintenance"]
+        "devices": live_devices if live_devices else [],
+        "alerts": live_alerts if live_alerts else [],
+        "usage": live_usage if live_usage else [],
+        "tickets": api_tickets,
+        "maintenance": api_maintenance
     }
 
 if __name__ == "__main__":
     # Test execution
     data = get_live_dashboard_data(use_mock=True)
-    print(f"Fetched {len(data['device_health'])} devices from Prometheus Mock")
-    print(json.dumps(data['device_health'][:2], indent=2))
+    print(f"--- API-FIRST INGESTION AUDIT ---")
+    print(f"Monitoring Sites: {len(set(d['site_name'] for d in data['devices']))}")
+    print(f"Active Devices: {len(data['devices'])}")
+    print(f"Active Tickets: {len(data['tickets'])}")
+    print(f"Tickets Source: Simulated Jira API")
+    print(f"----------------------------------")
+    print(json.dumps(data['tickets'][:1], indent=2))

@@ -59,7 +59,8 @@ def generate_daily_briefing(role="Fleet Manager", api_key=None):
             "issues": intelligence_output["all_issues"],
             "predictions": decision_output["predictions"],
             "recommendations": decision_output["recommendations"],
-            "briefing": briefing_output["briefing_text"]
+            "briefing": briefing_output["briefing_text"],
+            "raw_data": raw_data
         }
         
         logger.info("Pipeline executed successfully.")
