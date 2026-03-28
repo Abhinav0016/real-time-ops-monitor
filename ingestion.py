@@ -107,12 +107,10 @@ def load_maintenance(file_path='maintenance.json'):
 
 def load_all_data(data_dir='.'):
     """
-    Aggregates data from all sources into a single structured dictionary.
+    Aggregates data from local system-of-record files (Tickets/Maintenance).
+    Monitoring data is now handled by ingestion_prometheus.py
     """
     return {
-        "devices": load_device_data(os.path.join(data_dir, 'device_health.json')),
-        "alerts": load_alerts(os.path.join(data_dir, 'alerts.json')),
-        "usage": load_usage(os.path.join(data_dir, 'usage.json')),
         "tickets": load_tickets(os.path.join(data_dir, 'tickets.json')),
         "maintenance": load_maintenance(os.path.join(data_dir, 'maintenance.json'))
     }

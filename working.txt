@@ -10,7 +10,8 @@ The system follows a strict unidirectional data flow, starting from raw ingestio
 
 ```mermaid
 graph TD
-    A[JSON Data Sources] --> B[Ingestion Layer]
+    A1[Prometheus REST API] --> B[Ingestion Layer]
+    A2[Tickets/Maintenance JSON] --> B
     B --> C[Preprocessing Layer]
     C --> D[Feature Extraction]
     D --> E[Pattern Detection]
@@ -24,13 +25,15 @@ graph TD
 
 ## ⚙️ Detailed Workflow: The 7-Layer Pipeline
 
-### Layer 1: Data Ingestion (`ingestion.py`)
-- **Input**: 5x Physical JSON files (`device_health.json`, `usage.json`, etc.)
+### Layer 1: Data Ingestion (`ingestion_prometheus.py`)
+- **Input**: 
+    - **Live Monitoring**: Prometheus REST API (Simulated/Meteo) for Health, Usage, and Alerts.
+    - **System of Record**: Local JSON files for `tickets.json` and `maintenance.json`.
 - **Responsibility**:
-    - Uses `load_json_file` with mandatory field validation.
-    - **Validation**: If a record is missing a critical key (e.g., `device_id`), it is logged as a warning and skipped to prevent downstream crashes.
+    - Bridges PromQL time-series data into the structured 7-layer schema.
+    - Uses `load_json_file` with mandatory field validation for ticketing data.
     - **Initial Normalization**: Standardizes site names to Title Case and status/severity to lowercase.
-- **Output**: A raw dictionary containing lists of validated records.
+- **Output**: A raw dictionary containing unified records from both API and file sources.
 
 ### Layer 2: Preprocessing (`preprocessing.py`)
 - **Input**: Raw dictionary from Layer 1.

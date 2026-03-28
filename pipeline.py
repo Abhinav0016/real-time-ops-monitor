@@ -1,5 +1,5 @@
 import logging
-from ingestion import load_all_data
+from ingestion_prometheus import get_live_dashboard_data
 from preprocessing import preprocess_data
 from feature_extraction import extract_features
 from pattern_detection import detect_all_issues
@@ -17,9 +17,9 @@ def generate_daily_briefing(role="Fleet Manager", api_key=None):
     Calls all 7 functional layers sequentially and returns a structured response.
     """
     try:
-        # 1. Load Data
-        logger.info("Step 1: Ingesting raw data...")
-        raw_data = load_all_data()
+        # 1. Load Data (API-Driven)
+        logger.info("Step 1: Ingesting raw data from Prometheus API...")
+        raw_data = get_live_dashboard_data(use_mock=True)
         
         # 2. Preprocess Data
         logger.info("Step 2: Preprocessing...")
