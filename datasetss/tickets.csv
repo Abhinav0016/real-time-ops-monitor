@@ -1,0 +1,10 @@
+ticket_id,device_id,status,priority,days_open
+T100,STL-002,closed,medium,5
+T101,STL-004,closed,low,2
+T102,STL-007,open,high,6
+T103,STL-009,open,low,5
+T104,STL-005,open,high,1
+T105,STL-008,closed,medium,3
+T106,STL-012,closed,low,1
+T108,STL-014,open,low,2
+T109,STL-015,open,medium,3

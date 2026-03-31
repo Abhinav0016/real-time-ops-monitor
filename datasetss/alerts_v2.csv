@@ -1,0 +1,12 @@
+device_id,alert_type,timestamp
+STL-002,Ping Failed,28-03-2026 01:00
+STL-002,Latency Spike,28-03-2026 01:10
+STL-002,Timeout Error,28-03-2026 02:20
+STL-002,Signal Weak,28-03-2026 03:00
+STL-004,Power Fluctuation,28-03-2026 01:00
+STL-004,Ping Failed,28-03-2026 01:00
+STL-004,System Failure,28-03-2026 01:00
+STL-004,Component Offline,28-03-2026 01:00
+STL-011,Latency Spike,28-03-2026 01:00
+STL-011,Latency Spike,28-03-2026 02:00
+STL-014,Signal Weak,28-03-2026 01:00

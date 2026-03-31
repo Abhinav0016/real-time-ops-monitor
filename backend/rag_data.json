@@ -1,0 +1,217 @@
+[
+  {
+    "id": "sop-001",
+    "type": "sop",
+    "device_type": "Satellite Terminal",
+    "text": "For connectivity loss on a Satellite Terminal: first restart the terminal, then verify signal strength and dish alignment. If unresolved within 30 minutes, escalate to Tier 2 field operations."
+  },
+  {
+    "id": "sop-002",
+    "type": "sop",
+    "device_type": "Network Node",
+    "text": "For a Network Node ping failure or timeout error: restart the router, inspect routing tables, and verify upstream connectivity. If packet loss exceeds 30%, escalate immediately."
+  },
+  {
+    "id": "sop-003",
+    "type": "sop",
+    "device_type": "Tower",
+    "text": "For a Tower offline status: check site power supply, inspect hardware for physical damage, and verify local power grid status. Dispatch field engineer if power is confirmed normal but device remains offline."
+  },
+  {
+    "id": "sop-004",
+    "type": "sop",
+    "device_type": "Bandwidth System",
+    "text": "For a Bandwidth System showing high data usage or spike: analyze current consumption patterns, redistribute bandwidth allocation, and evaluate whether an upgrade is required. Alert network planner if spike exceeds 30% above baseline."
+  },
+  {
+    "id": "sop-005",
+    "type": "sop",
+    "device_type": "Latency Monitor",
+    "text": "For high latency alerts: send diagnostic packets to trace the path, identify bottlenecks in the routing chain, and optimize data paths. Escalate if latency exceeds 300ms sustained for more than 15 minutes."
+  },
+  {
+    "id": "sop-006",
+    "type": "sop",
+    "device_type": "Outage System",
+    "text": "For an Outage System alert: run full system diagnostics, identify root cause module, and scan for cascading failures. Immediately escalate to Tier 2 and open a critical incident ticket if more than 2 devices are impacted."
+  },
+  {
+    "id": "sop-007",
+    "type": "sop",
+    "alert_type": "Signal Weak",
+    "text": "For weak signal alerts: check antenna orientation, verify there are no obstructions or interference sources, and review weather conditions. If signal degradation persists over 1 hour, schedule physical inspection."
+  },
+  {
+    "id": "sop-008",
+    "type": "sop",
+    "alert_type": "Power Fluctuation",
+    "text": "For power fluctuation alerts: inspect UPS battery backup levels, verify grid supply voltage, and check breaker panels. If fluctuation exceeds ±10% of nominal voltage, switch to backup power immediately."
+  },
+  {
+    "id": "sop-009",
+    "type": "sop",
+    "alert_type": "Latency Spike",
+    "text": "For latency spike alerts: verify backbone link health, check for DDoS or traffic floods, and reduce traffic shaping thresholds. If sustained, reroute traffic through alternate path."
+  },
+  {
+    "id": "sop-010",
+    "type": "sop",
+    "alert_type": "Component Offline",
+    "text": "For component offline alerts: attempt a remote restart of the affected module. If remote restart fails, dispatch field technician for physical replacement. Log all attempts in the maintenance system."
+  },
+  {
+    "id": "sop-011",
+    "type": "sop",
+    "alert_type": "System Failure",
+    "text": "For system failure alerts: isolate the device from the network to prevent downstream impact, run full hardware diagnostics, and open a Priority-1 incident ticket. Notify the operations manager within 15 minutes."
+  },
+  {
+    "id": "sop-012",
+    "type": "sop",
+    "scenario": "multi-alert",
+    "text": "When a single device generates 3 or more alerts within 24 hours: treat as a critical escalation. Do not apply individual fixes — instead, conduct a full device health audit and consider temporary failover to a backup device."
+  },
+  {
+    "id": "sop-013",
+    "type": "sop",
+    "scenario": "offline-extended",
+    "text": "When a device has been offline for more than 12 hours: initiate an emergency field dispatch, notify the site manager, and update the incident ticket to critical priority. Do not close the ticket until the device is confirmed online."
+  },
+  {
+    "id": "sop-014",
+    "type": "sop",
+    "scenario": "usage-spike",
+    "text": "When data usage spikes more than 20% above the previous day and exceeds 45 GB: immediately inspect for unauthorized access or misconfigured application. Throttle the device if no authorized explanation is found within 1 hour."
+  },
+  {
+    "id": "sop-015",
+    "type": "sop",
+    "scenario": "stale-ticket",
+    "text": "When an open ticket has been unresolved for more than 5 days: escalate to senior operations team, update ticket priority to high, and schedule a mandatory resolution review within 24 hours."
+  },
+  {
+    "id": "inc-001",
+    "type": "incident",
+    "site": "A",
+    "text": "Site A Satellite Terminal STL-001 went offline and remained unreachable for over 21 hours. Root cause was identified as power supply failure. Resolved by emergency field dispatch and UPS replacement."
+  },
+  {
+    "id": "inc-002",
+    "type": "incident",
+    "site": "C",
+    "text": "Site C device STL-003 disconnected repeatedly due to a damaged signal interface. After 3 failed remote restart attempts, a field engineer replaced the antenna module. Downtime: 22 hours."
+  },
+  {
+    "id": "inc-003",
+    "type": "incident",
+    "site": "E",
+    "text": "Site E experienced full outage when STL-005 lost power during a local grid failure. Emergency generator was activated 4 hours later. Total downtime: 21 hours. Backup power SOP now mandatory for this site."
+  },
+  {
+    "id": "inc-004",
+    "type": "incident",
+    "site": "F",
+    "text": "Site F STL-006 went offline due to a firmware crash. Remote reflash was attempted but failed. Physical intervention required. Device was restored after 23 hours downtime."
+  },
+  {
+    "id": "inc-005",
+    "type": "incident",
+    "site": "B",
+    "text": "Site B device STL-002 generated 4 consecutive alerts within 1.5 hours: Ping Failed, Latency Spike, Timeout Error, Signal Weak. Full device audit conducted. Cause: overloaded routing table. Flushed and restarted."
+  },
+  {
+    "id": "inc-006",
+    "type": "incident",
+    "site": "D",
+    "text": "Site D STL-004 triggered 4 alerts simultaneously: Power Fluctuation, Ping Failed, System Failure, Component Offline. Root cause: power surge destroyed the internal switching module. Device replaced under warranty."
+  },
+  {
+    "id": "inc-007",
+    "type": "incident",
+    "site": "K",
+    "text": "Site K STL-011 registered two latency spikes within 1 hour. Investigation found a congested upstream link. Traffic was rerouted and latency normalized within 45 minutes."
+  },
+  {
+    "id": "inc-008",
+    "type": "incident",
+    "site": "N",
+    "text": "Site N STL-014 showed a weak signal alert. Physical inspection revealed the dish had shifted by 3 degrees due to wind stress. Realignment resolved the issue in under 2 hours."
+  },
+  {
+    "id": "inc-009",
+    "type": "incident",
+    "scenario": "usage-spike",
+    "text": "Multiple devices across Sites G and H reported data usage increases of 25–35% above baseline over 3 consecutive days. Cause traced to an unconfigured video streaming service. Throttling applied as per SOP-014."
+  },
+  {
+    "id": "inc-010",
+    "type": "incident",
+    "scenario": "multi-site-outage",
+    "text": "Sites A, C, E, and F experienced simultaneous offline events due to a regional grid disruption. Central coordination team was activated. Recovery took between 19 and 23 hours across all sites."
+  },
+  {
+    "id": "inc-011",
+    "type": "incident",
+    "scenario": "cascading-alerts",
+    "text": "A single misconfigured VLAN caused cascading ping failures across 5 devices at 3 different sites. All devices generated 3+ alerts within 2 hours. VLAN was corrected after 4 hours and all devices restored."
+  },
+  {
+    "id": "inc-012",
+    "type": "incident",
+    "scenario": "stale-ticket",
+    "text": "Ticket T102 for STL-007 remained open for 6 days due to scheduling conflicts for field dispatch. Escalated to senior ops team on day 5. Resolution completed on day 7. SLA breached."
+  },
+  {
+    "id": "inc-013",
+    "type": "incident",
+    "scenario": "stale-ticket",
+    "text": "Ticket T103 for STL-009 remained open for 5 days. Initial priority was marked low despite the device being a key routing hub. Reprioritized to high after 3 days; resolved on day 6."
+  },
+  {
+    "id": "inc-014",
+    "type": "incident",
+    "scenario": "repeated-disconnect",
+    "text": "Terminal STL-002 disconnected 5 times within a single week due to intermittent signal degradation. Each reconnection took 20–40 minutes. Root cause: loose antenna cable. Permanently fixed after third disconnect."
+  },
+  {
+    "id": "inc-015",
+    "type": "incident",
+    "scenario": "power-fluctuation",
+    "text": "Power fluctuation at Site D caused a brief undervoltage condition that corrupted the device firmware. Firmware reflash was required. UPS inspection revealed battery at 12% capacity — replacement recommended."
+  },
+  {
+    "id": "tkt-001",
+    "type": "ticket",
+    "ticket_id": "T102",
+    "device_id": "STL-007",
+    "text": "Ticket T102 is open for STL-007 at Site G with high priority. Open for 6 days. Awaiting field technician dispatch for hardware inspection. SLA at risk."
+  },
+  {
+    "id": "tkt-002",
+    "type": "ticket",
+    "ticket_id": "T103",
+    "device_id": "STL-009",
+    "text": "Ticket T103 is open for STL-009 at Site I with low priority. Open for 5 days. Device is a core routing hub — priority should be reassessed. Field visit pending."
+  },
+  {
+    "id": "tkt-003",
+    "type": "ticket",
+    "ticket_id": "T104",
+    "device_id": "STL-005",
+    "text": "Ticket T104 for STL-005 at Site E is open with high priority. Opened 1 day ago following offline event. Field dispatch scheduled but not yet completed."
+  },
+  {
+    "id": "tkt-004",
+    "type": "ticket",
+    "ticket_id": "T108",
+    "device_id": "STL-014",
+    "text": "Ticket T108 for STL-014 at Site N is open with low priority. Opened 2 days ago following a weak signal alert. Remote diagnostics completed; awaiting final sign-off."
+  },
+  {
+    "id": "tkt-005",
+    "type": "ticket",
+    "ticket_id": "T109",
+    "device_id": "STL-015",
+    "text": "Ticket T109 for STL-015 at Site O is open with medium priority. Opened 3 days ago for a latency monitoring issue. No field action taken yet; remote review scheduled."
+  }
+]

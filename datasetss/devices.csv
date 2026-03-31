@@ -1,0 +1,16 @@
+device_id,site,status,last_seen
+STL-001,A,offline,27-03-2026 12:00
+STL-002,B,offline,27-03-2026 12:00
+STL-003,C,offline,27-03-2026 12:00
+STL-004,D,offline,27-03-2026 12:00
+STL-005,E,online,28-03-2026 01:00
+STL-006,F,online,28-03-2026 01:00
+STL-007,G,online,28-03-2026 01:00
+STL-008,H,online,28-03-2026 01:00
+STL-009,I,offline,27-03-2026 12:00
+STL-010,J,online,28-03-2026 01:00
+STL-011,K,online,28-03-2026 01:00
+STL-012,L,offline,27-03-2026 12:00
+STL-013,M,offline,27-03-2026 12:00
+STL-014,N,offline,27-03-2026 12:00
+STL-015,O,offline,27-03-2026 12:00
