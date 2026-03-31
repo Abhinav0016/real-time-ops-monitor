@@ -4,6 +4,22 @@ An AI-powered decision intelligence platform that transforms fragmented telecom 
 
 Syntomos acts as an intelligence layer on top of existing monitoring tools, helping telecom operations teams understand **what happened, why it matters, and what to do next**.
 
+
+
+---
+
+## 📸 Screenshots
+
+````carousel
+![Dashboard Overview](frontend/src/assets/demo1.png)
+<!-- slide -->
+![Predictive Analytics](frontend/src/assets/demo2.png)
+<!-- slide -->
+![Market analysis](frontend/src/assets/demo3.png)
+<!-- slide -->
+![Interactive Map](frontend/src/assets/demo4.png)
+````
+
 ---
 
 ## 🧠 Overview
@@ -94,8 +110,6 @@ Briefing/Chat UI    ◄───  AI Intelligence   ◄───  FAISS Vector D
 cd backend
 # Recommended: create a virtual environment first
 pip install -r requirements.txt
-# Additional RAG dependencies
-pip install faiss-cpu sentence-transformers sendgrid
 cp .env.template .env
 # Add API keys to .env
 python app.py
