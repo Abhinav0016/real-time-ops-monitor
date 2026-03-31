@@ -1,70 +1,139 @@
-# 🚀 AI Telecom Network Operations Dashboard
+# 🚀 Syntomos — AI Telecom Network Operations Dashboard
 
-An AI-powered decision intelligence system that transforms raw operational data into concise, role-based daily briefings and interactive assistance.
+An AI-powered decision intelligence platform that transforms fragmented telecom operational data into concise, role-based daily briefings, predictive alerts, and interactive AI assistance.
+
+Syntomos acts as an intelligence layer on top of existing monitoring tools, helping telecom operations teams understand **what happened, why it matters, and what to do next**.
+
+---
 
 ## 🧠 Overview
 
-Modern telecom operations are overwhelmed by fragmented data. This dashboard centralizes device health, alerts, usage metrics, and tickets, using AI to prioritize what matters most for different organizational roles.
+Modern telecom operations teams are overwhelmed by fragmented dashboards, alert fatigue, and disconnected ticketing systems.
 
-## 🎯 Key Features
+**Syntomos** acts as an intelligence layer on top of existing monitoring tools by consolidating:
 
-- **Role-Based Daily Briefing**: Tailored summaries for Fleet Managers, NOC Analysts, and Site Supervisors.
-- **Interactive AI Chatbot**: A domain-specific, role-aware assistant powered by Groq (LLM).
-- **Proactive Root Cause Analysis**: AI-driven insights into "why" issues are happening and "what to do" about them.
-- **Visual Analytics**: Interactive maps with pulsing critical alerts and performance trend charts.
-- **Secure Integration**: Environment-based configuration for API keys.
+* 📡 Device health
+* 🚨 Alert streams
+* 📊 Usage metrics
+* 🎫 Support tickets
+* 📍 Site-level performance
+* 📚 Operational Knowledge Base (SOPs & History)
+
+The system uses AI to prioritize incidents based on operational and business impact and delivers **role-specific briefings** for different stakeholders.
+
+---
+
+## ✨ Key Features
+
+### 🧠 RAG-Powered Role-Based Daily Briefing
+Customized summaries and actionable insights for:
+* 👨‍🔧 Fleet Operations Manager
+* 🧑‍💻 NOC Analyst
+* 🦺 Site Supervisor
+
+Uses **Retrieval-Augmented Generation (RAG)** to correlate live data with historical incidents and Standard Operating Procedures (SOPs).
+
+### 🤖 Interactive AI Chatbot
+A domain-specific assistant powered by **openai/gpt-oss-120b** (via Groq) providing:
+* Root cause analysis
+* Context-aware SOP recommendations
+* Multi-role support
+
+### 🚨 Critical Alert Notifications
+* **Real-time Subscriptions**: Subscribe via the dashboard for instant email alerts.
+* **Proactive Notifications**: Critical failures trigger immediate alerts via SendGrid/Mailgun.
+
+### 📊 Market Analysis Explorer
+* **Usage Trends**: Deep dive into network-wide bandwidth consumption.
+* **Site Comparison**: Performance benchmarking across geographic sites.
+* **Business Analytics**: Strategic cost vs. profit analysis per site.
+
+### 📍 Interactive Network Map
+* Pulsing outage markers with geographic precision.
+* Hover-over health status and incident reasons.
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React (Vite), Leaflet (Maps), Recharts (Analytics), Lucide-React (Icons), React-Markdown.
-- **Backend**: Python, Flask, Groq API, OpenAI API (for briefings), Pandas (Data Processing), Python-Dotenv.
+### Frontend
+* **React (Vite)**
+* **Leaflet** (GIS mapping)
+* **Recharts** (Interactive analytics)
+* **Lucide React** (Iconography)
+
+### Backend
+* **Python (Flask)**
+* **Pandas** (Data processing)
+* **FAISS** (Vector database for RAG)
+* **Sentence-Transformers** (Semantic embeddings)
+* **Groq SDK** (LLM Orchestration)
+
+---
+
+## 🏗️ System Architecture
+
+```text
+Data Sources (CSV)  ───►  Detection Engine  ───►  Query Builder
+                              (Pandas)              (RAG Logic)
+                                                        │
+Briefing/Chat UI    ◄───  AI Intelligence   ◄───  FAISS Vector DB
+ (React Frontend)         (GPT-OSS-120b)          (SOPs/History)
+                                │
+                        Subscription Engine ───►  Email Alerts
+                                                  (SendGrid)
+```
+
+---
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 1️⃣ Setup Backend
 
-- Node.js & npm
-- Python 3.8+
-- Groq API Key & OpenAI API Key
-
-### Installation
-
-   ```bash
-   git clone https://github.com/armada-code-recet/code-warriors.git
-   cd code-warriors
-   ```
-
-## 🚀 Getting Started
-
-The project is split into two independent services: `frontend` and `backend`.
-
-### 1. Setup Backend
 ```bash
 cd backend
+# Recommended: create a virtual environment first
 pip install -r requirements.txt
-# Create .env from .env.template and add your keys
+# Additional RAG dependencies
+pip install faiss-cpu sentence-transformers sendgrid
+cp .env.template .env
+# Add API keys to .env
 python app.py
 ```
-Runs on: http://localhost:5000
 
-### 2. Setup Frontend
+### 2️⃣ Setup Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Runs on: http://localhost:5173 (Vite default)
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file in the `backend` directory:
+
+```env
+OPENAI_API_KEY=your_openai_key
+GROQ_API_KEY=your_groq_key
+SENDGRID_API_KEY=your_sendgrid_key
+SENDER_EMAIL=alerts@telecom-ops.ai
+DISABLE_SENDGRID=false # Set to true to bypass email sending
+```
+
+---
 
 ## 📌 Usage
 
-- **Switch Roles**: Use the selector in the top-right to view data as a Fleet Manager, NOC Analyst, or Site Supervisor.
-- **Briefing**: The left panel automatically updates with a role-specific briefing.
-- **Chatbot**: Use the floating widget in the bottom-right to ask specific operational questions. Use the "Typical Questions" chips for quick insights.
+* **Role Switching**: Use the top-right selector to view role-specific intelligence.
+* **SOP Access**: Click "View Action" in briefings to reveal RAG-retrieved procedures.
+* **Alerts**: Enter your email in the header to subscribe to critical network events.
+* **Analytics**: Open the "Market Analysis" explorer for strategic network insights.
 
-## 🧠 Contextual Awareness
+---
 
-The AI has access to:
-- **Device Health**: Real-time status of all satellite terminals.
-- **Alerts**: Severity-ranked event logs.
-- **Usage**: Data trends and congestion risks.
-- **Tickets**: Support backlog and escalation status.
+## 👨‍💻 Team
+
+Built by **Code Warriors**
