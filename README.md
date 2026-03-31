@@ -29,44 +29,31 @@ Modern telecom operations are overwhelmed by fragmented data. This dashboard cen
 
 ### Installation
 
-1. **Clone the repository**:
    ```bash
    git clone https://github.com/armada-code-recet/code-warriors.git
    cd code-warriors
    ```
 
-2. **Setup Backend**:
-   ```bash
-   # From root
-   pip install -r requirements.txt
-   ```
-   Create a `.env` file in the `backend/` directory:
-   ```env
-   OPENAI_API_KEY=your_openai_key
-   GROQ_API_KEY=your_groq_key
-   ```
+## 🚀 Getting Started
 
-3. **Setup Frontend**:
-   ```bash
-   cd frontend
-   npm install
-   ```
+The project is split into two independent services: `frontend` and `backend`.
 
-### Running the App
+### 1. Setup Backend
+```bash
+cd backend
+pip install -r requirements.txt
+# Create .env from .env.template and add your keys
+python app.py
+```
+Runs on: http://localhost:5000
 
-1. **Start Backend**:
-   ```bash
-   cd backend
-   python app.py
-   ```
-   (Runs on http://localhost:5000)
-
-2. **Start Frontend**:
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-   (Typically runs on http://localhost:3000)
+### 2. Setup Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Runs on: http://localhost:5173 (Vite default)
 
 ## 📌 Usage
 

@@ -12,7 +12,7 @@ load_dotenv()
 
 def get_all_data(role="Fleet Operations Manager"):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = os.path.join(BASE_DIR, "..", "datasetss")
+    DATA_DIR = os.path.join(BASE_DIR, "datasetss")
     devices = pd.read_csv(os.path.join(DATA_DIR, "devices_v2.csv"))
     alerts = pd.read_csv(os.path.join(DATA_DIR, "alerts_v2.csv"))
     usage = pd.read_csv(os.path.join(DATA_DIR, "usage.csv"))
