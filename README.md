@@ -10,13 +10,17 @@ Syntomos acts as an intelligence layer on top of existing monitoring tools, help
 
 ## 📸 Screenshots
 
-<div align="center">
-  <img src="frontend/src/assets/demo1.png" width="45%" alt="Dashboard Overview" />
-  <img src="frontend/src/assets/demo2.png" width="45%" alt="Predictive Analytics" />
+<details>
+  <summary>📸 <b>View App Screenshots</b> (Click to expand)</summary>
   <br />
-  <img src="frontend/src/assets/demo3.png" width="45%" alt="Market Analysis" />
-  <img src="frontend/src/assets/demo4.png" width="45%" alt="Interactive Map" />
-</div>
+  <img src="frontend/src/assets/demo1.png" alt="Dashboard Overview" width="100%" />
+  <hr />
+  <img src="frontend/src/assets/demo2.png" alt="Predictive Analytics" width="100%" />
+  <hr />
+  <img src="frontend/src/assets/demo3.png" alt="Market Analysis" width="100%" />
+  <hr />
+  <img src="frontend/src/assets/demo4.png" alt="Interactive Map" width="100%" />
+</details>
 
 ---
 
